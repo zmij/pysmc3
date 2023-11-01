@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-import asyncio
 import argparse
 import logging
 
-from termcolor import colored, cprint
+from termcolor import cprint
 
 from smc3 import Box, MotorNumber, Parameter, DEFAULT_BAUDRATE
 
@@ -27,19 +26,18 @@ def main():
     if args.position < 0 or 1024 < args.position:
         raise ValueError(f"Invalid motor position {args.position}")
 
-    loop = asyncio.get_event_loop()
-    box = Box(loop=loop, device=args.device, baudrate=args.baudrate)
-    v = loop.run_until_complete(box.get_version_async())
+    box = Box(device=args.device, baudrate=args.baudrate)
+    v = box.get_version()
     cprint(f"SMC3 Version: {v / 100}", "red")
 
     motor = MotorNumber.__members__[args.motor]
     box.enable_feedback(motor)
     try:
         box.set_position(motor, args.position)
-        loop.run_until_complete(asyncio.sleep(2))
+        box.delay(2)
     except KeyboardInterrupt:
         box.disable_feedback()
-        loop.run_until_complete(asyncio.sleep(1))
+        box.delay(1)
 
 
 if __name__ == "__main__":

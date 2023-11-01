@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import asyncio
 import argparse
 import logging
 
@@ -22,27 +21,26 @@ def main():
     parser.add_argument("device", help="USB device")
     args = parser.parse_args()
 
-    loop = asyncio.get_event_loop()
-    box = Box(loop=loop, device=args.device, baudrate=args.baudrate)
-    v = loop.run_until_complete(box.get_version_async())
+    box = Box(device=args.device, baudrate=args.baudrate)
+    v = box.get_version()
     cprint(f"SMC3 Version: {v / 100}", "red")
 
     for m in MotorNumber.__members__.values():
         cprint(f"Motor {m.name}", "cyan", attrs=["bold"])
         for p in [Parameter.Kp, Parameter.Ki, Parameter.Kd, Parameter.Ks]:
-            v = loop.run_until_complete(box.read_param_async(m, p))
+            v = box.read_param(m, p)
             cprint(f"  {p.name}: {v[0]/100}", attrs=["bold"])
 
         for p in [Parameter.MinMax, Parameter.PWMinMax, Parameter.FBDeadZone]:
-            v = loop.run_until_complete(box.read_param_async(m, p))
+            v = box.read_param(m, p)
             cprint(f"  {p.name}: {v}", attrs=["bold"])
 
-        v = loop.run_until_complete(box.read_param_async(m, Parameter.Position))
+        v = box.read_param(m, Parameter.Position)
         cprint(f"  Position", "blue", attrs=["bold"])
         cprint(f"    target:   {v[0]}", "blue", attrs=["bold"])
         cprint(f"    feedback: {v[1]}", "blue", attrs=["bold"])
 
-        v = loop.run_until_complete(box.read_param_async(m, Parameter.PwmStatus))
+        v = box.read_param(m, Parameter.PwmStatus)
         cprint(f"  pwm:    {v[0]}", "magenta", attrs=["bold"])
         cprint(f"  status: {v[1]}", "red", attrs=["bold"])
 

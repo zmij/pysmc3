@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-import asyncio
 import argparse
 import logging
 import math
 import time
 
-from termcolor import colored, cprint
+from termcolor import cprint
 
-from smc3 import Box, MotorNumber, Parameter, DEFAULT_BAUDRATE
+from smc3 import Box, MotorNumber, DEFAULT_BAUDRATE
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,9 +24,8 @@ def main():
     parser.add_argument("motor", choices=["A", "B", "C"], help="Motor to monitor")
     args = parser.parse_args()
 
-    loop = asyncio.get_event_loop()
-    box = Box(loop=loop, device=args.device, baudrate=args.baudrate)
-    v = loop.run_until_complete(box.get_version_async())
+    box = Box(device=args.device, baudrate=args.baudrate)
+    v = box.get_version()
     cprint(f"SMC3 Version: {v / 100}", "red")
 
     motor = MotorNumber.__members__[args.motor]
@@ -35,12 +33,11 @@ def main():
     try:
         while 1:
             v = int(math.sin(time.clock_gettime(time.CLOCK_MONOTONIC)) * 512) + 512
-            # box.log_info(f"{v}")
             box.set_position(motor, v)
-            loop.run_until_complete(asyncio.sleep(0.01))
+            box.delay(0.01)
     except KeyboardInterrupt:
         box.disable_feedback()
-        loop.run_until_complete(asyncio.sleep(1))
+        box.delay(1)
 
 
 if __name__ == "__main__":

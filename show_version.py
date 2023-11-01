@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import asyncio
 import argparse
 import logging
 
@@ -19,10 +18,9 @@ def main():
     parser.add_argument("device", help="USB device")
     args = parser.parse_args()
 
-    loop = asyncio.get_event_loop()
-    box = Box(loop=loop, device=args.device, baudrate=args.baudrate)
+    box = Box(device=args.device, baudrate=args.baudrate)
 
-    res = loop.run_until_complete(box.get_version_async())
+    res = box.get_version()
     print(res / 100)
 
 
