@@ -1,4 +1,4 @@
-# pysmc3 - Python Library for SMC3 Arduino-based Motor Controllers
+# pysmc3 - Python Library for SMC3 Motor Controllers
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@
 
 ## About
 
-`pysmc3` is a Python library designed to interact with SMC3, an Arduino-based software for controlling 3-DOF motion simulators used in gaming. This library provides an alternative to the existing diagnostic tools, which are only available for Windows. The library offers a convenient abstraction of the control box, allowing you to read and write parameters as well as set motor positions.
+`pysmc3` is a Python library designed to interact with [SMC3](https://github.com/SimulatorMotorController/SMC3), an Arduino-based software for controlling 3-DOF motion simulators used in gaming. This library provides an alternative to the existing diagnostic tools, which are only available for Windows. The library offers a convenient abstraction of the control box, allowing you to read and write parameters as well as set motor positions.
 
 ## Features
 
