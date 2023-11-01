@@ -29,7 +29,13 @@
 
 ## Installation
 
-Clone the GitHub repository and install the required dependencies:
+Install with pip
+
+```bash
+pip install smc3
+```
+
+Or clone the GitHub repository and install the required dependencies:
 
 ```bash
 git clone https://github.com/zmij/pysmc3.git
